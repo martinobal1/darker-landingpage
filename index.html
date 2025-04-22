@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Extension</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #333333;
+            color: white;
+            text-align: center;
+            scroll-behavior: smooth;
+        }
+        .nav {
+    z-index: 10;
+    position: absolute;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px; /* Zmenené z 100px pre nižšie umiestnenie */
+    background: transparent;
+    transition: color 0.5s;
+}
+
+.nav-links a {
+    color: black;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+    transition: color 0.5s;
+}
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.5s;
+        }
+        .logo-img {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%; /* zaoblenie do kruhu */
+    object-fit: cover;
+    margin-left: 15px;
+}
+
+        .banner-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            margin-top: 0px; /* Upravené na 0, keďže nie je pod navigáciou s paddingom */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .banner-container h1 {
+            font-size: 80px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: black;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Pridaný tieň pre lepšiu čitateľnosť */
+            margin-bottom: 20px; /* Pridaný priestor pod nadpisom */
+        }
+        .banner-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('screenshot-light.png'); /* Nastavený prvý obrázok ako pozadie */
+            background-size: cover;
+            background-position: center;
+            z-index: -1; /* Umiestnenie za text a button */
+        }
+        .download-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px; /* Priestor pod bannerom */
+            width: 100%;
+        }
+        .download-button {
+            margin-right: 10px; /* Priestor medzi buttonom a logom */
+        }
+        .chrome-logo {
+            height: 40px; /* Prispôsob výšku loga podľa potreby */
+            width: auto;
+        }
+        .about-section, .gallery-section {
+            background-color: #333;
+            color: white;
+            padding: 50px 0;
+            opacity: 0;
+            transform: scale(0.95);
+            animation: zoomIn 1s forwards;
+        }
+        .about-container, .gallery-container {
+            display: flex;
+            flex-direction: row-reverse;
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            justify-content: space-between;
+        }
+        .about-text, .gallery-text, .about-image, .gallery-image {
+            width: 48%;
+            padding: 20px;
+        }
+        .about-text, .gallery-text {
+            text-align: left;
+            font-size: 22px;
+            line-height: 1.8;
+        }
+        .about-image img, .gallery-image img {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+        }
+        .about-section h2, .gallery-section h2 {
+            font-size: 36px;
+            text-align: center;
+        }
+        @keyframes zoomIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .lightbox-buttons {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+        }
+
+        .lightbox-button {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .lightbox-button:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        footer {
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            width: 100%;
+            bottom: 0;
+        }
+        #features {
+    background-color: #f4f4f4;
+    color: #333;
+    border-radius: 12px;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#features h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-logo">
+            <a href="#"><img src="icon.png" alt="Logo" class="logo-img"></a>
+        </div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#about">About me</a>
+        </div>
+    </nav>
+
+    <div class="banner-container" id="home">
+        <div class="banner-image"></div>
+        <h1 id="title">DARKER</h1>
+    </div>
+
+    <div class="download-section">
+        <a href="darker.rar" download="darker.rar" class="btn btn-primary btn-lg download-button">Download Extension</a>
+        <img src="chrome_logo.png" alt="Chrome Logo" class="chrome-logo">
+    </div>
+
+    <section id="features" style="padding: 20px; margin-top:40px;">
+        <h2>List of Features</h2>
+
+            <p>🌙 Dark mode that changes white backgrounds to black</p>
+            <p>📝 Text color changes to white for better readability in dark mode</p>
+            <p>🎨 Sepia filter for a warm, eye-friendly browsing experience</p>
+
+    </section>
+
+    <section id="video-tutorial" class="about-section">
+        <h2>Extension advertisement</h2>
+        <div class="about-container" style="flex-direction: column; align-items: center;">
+            <video width="80%" controls>
+                <source src="Darker.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery-section">
+        <h2>Gallery</h2>
+        <div class="gallery-container">
+            <div class="gallery-image">
+                <img src="gallery1.png" alt="Gallery Image 1" onclick="openLightbox('gallery1.png')">
+            </div>
+            <div class="gallery-image">
+                <img src="gallery2.png" alt="Gallery Image 2" onclick="openLightbox('gallery2.png')">
+            </div>
+            <div class="gallery-image">
+                <img src="gallery3.png" alt="Gallery Image 3" onclick="openLightbox('gallery3.png')">
+            </div>
+            <div class="gallery-image">
+                <img src="gallery4.png" alt="Gallery Image 4" onclick="openLightbox('gallery4.png')">
+            </div>
+        </div>
+    </section>
+
+    <h2>Producthunt</h2>
+    <iframe style="border: none;" src="https://cards.producthunt.com/cards/posts/952731?v=1" width="500" height="405" frameborder="0" scrolling="no" allowfullscreen></iframe>
+
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-buttons">
+            <button class="lightbox-button" onclick="changeImage(-1)">&#10094;</button>
+            <button class="lightbox-button" onclick="changeImage(1)">&#10095;</button>
+        </div>
+        <img id="lightbox-image" src="" alt="Lightbox Image">
+    </div>
+    <section id="video-tutorial" class="about-section">
+        <h2>Video Tutorial</h2>
+        <div class="about-container" style="flex-direction: column; align-items: center;">
+            <video width="80%" controls>
+                <source src="tutorial.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+</section>
+    <section id="about" class="about-section">
+        <h2>About me</h2>
+        <div class="about-container">
+            <div class="about-text">
+                <p>I am a student of Applied Informatics, and as part of my studies and personal projects, I have developed a Google Chrome extension focused on providing a dark mode experience for web browsing. The primary function of this extension is to enhance readability and reduce eye strain by converting bright backgrounds into dark ones while ensuring that the text remains clearly visible by adjusting its color accordingly.</p>
+            </div>
+            <div class="about-image">
+                <img src="extension.png" alt="Project Image">
+            </div>
+        </div>
+    </section>
+<section id="contact" class="about-section">
+        <h2>Contact me</h2>
+        <div class="about-container">
+
+            <p>If you have any questions, suggestions, or would like to leave a review, feel free to contact me via email at
+                <a href="mailto:2815671@ucm.sk" style="color: #00bcd4;">2815671@ucm.sk</a>. I would be happy to hear from you!
+            </p>
+
+        </div>
+</section>
+
+
+
+
+    <footer>
+        <p>&copy; Martin Obal <span id="current-year"></span></p>
+    </footer>
+
+    <script>
+document.getElementById('current-year').textContent = new Date().getFullYear();
+
+let currentImage = '';
+function openLightbox(imageSrc) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    currentImage = imageSrc;
+    lightboxImage.src = imageSrc;
+    lightbox.style.display = 'flex';
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.style.display = 'none';
+}
+
+function changeImage(direction) {
+    const images = ['gallery1.png', 'gallery2.png', 'gallery3.png', 'gallery4.png'];
+    let currentIndex = images.indexOf(currentImage);
+    currentIndex += direction;
+
+    if (currentIndex < 0) {
+        currentIndex = images.length - 1;
+    } else if (currentIndex >= images.length) {
+        currentIndex = 0;
+    }
+
+    currentImage = images[currentIndex];
+    document.getElementById('lightbox-image').src = currentImage;
+}
+
+const nav = document.querySelector('.nav');
+const title = document.getElementById('title');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+function updateColors() {
+    nav.style.color = 'black';
+    title.style.color = 'black';
+    navLinks.forEach(link => {
+        link.style.color = 'black';
+    });
+}
+
+// Zavoláme funkciu hneď po načítaní stránky, aby nastavila farby na čiernu.
+updateColors();
+    </script>
+</body>
+</html>
